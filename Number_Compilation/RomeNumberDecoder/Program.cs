@@ -6,7 +6,8 @@ namespace RomeNumberDecoder
 {
     class Program
     {
-
+       
+          
         static void Main(string[] args)
         {
             bool HvaeD(List<int> x)
@@ -21,69 +22,57 @@ namespace RomeNumberDecoder
                 return false;
             }
 
-            List<int> romeNumber = new List<int>() { 10, 10, 1, 10 };
-            //int countList = romeNumber.Count();
-            bool haveDuble = false;
-            // for (int j = 0; j < romeNumber.Count; j++)
-            //{
+            Dictionary<char, int> number = new Dictionary<char, int>
+            {
+                {'I', 1   },
+                {'V', 5   },
+                {'X', 10  },
+                {'L', 50  },
+                {'C', 100 },
+                {'D', 500 },
+                {'M', 1000}
+            };
+
+            List<int> romeNumber = new List<int>();
+
+            string roman = "XVI";
+
+            List<char> strList = roman.ToList();
+
+            foreach (var item in strList)
+            {
+                romeNumber.Add(number[item]);
+            }
+
+            //Покуда в массиве есть повторяющиеся символы
             while (HvaeD(romeNumber))
-            {
-                for (int i = 0; i <= romeNumber.Count - 2; i++)
-                {
-                    int index = 0;
-                    int koef = 1;
-                        while (romeNumber[index] == romeNumber[index + 1])
-                        {
-                            index++;
-                            koef++;
-                        }
-                    romeNumber.Add(romeNumber[index] * koef);
-                    romeNumber.RemoveRange(0, koef);
-                }
+             {
+                 for (int i = 0; i <= romeNumber.Count - 2; i++)
+                 {
+                     //Перенос в конец массива суммы повторяющихся подрят символов
+                     int index = 0;
+                     int koef = 1;
+                         while (romeNumber[index] == romeNumber[index + 1])
+                         {
+                             index++;
+                             koef++;
+                         }
+                     romeNumber.Add(romeNumber[0] * koef);
+                     romeNumber.RemoveRange(0, koef);
+                 }
+                 romeNumber.Add(romeNumber[0]);
+                 romeNumber.RemoveAt(0);
+             }
 
-                if (romeNumber[0] == 1)
-                {
-                    if (romeNumber[romeNumber.Count] < 3)
-                        romeNumber[romeNumber.Count] += 1;
-                    else
-                        romeNumber.Add(1);
+            int res = 0;
 
-                }
-                else
-                {
-                    //if (romeNumber[romeNumber.Count] == 1)
-                    //    romeNumber[romeNumber.Count] -= 1;
-                    //else
-                    //    romeNumber.Add(romeNumber[0]);       
-                    
-
-                    if (romeNumber[romeNumber.Count - 1].ToString().ToCharArray().Length - romeNumber[0].ToString().ToCharArray().Length == -1)
-                    {
-                        romeNumber[romeNumber.Count - 1] = romeNumber[0] - romeNumber[romeNumber.Count - 1];
-                    }
-                    else
-                    {
-                        romeNumber.Add(1);
-                    }
-                }
-
-                romeNumber.RemoveRange(0, 1);
+            while (romeNumber.Count > 1)
+            { 
+                res = romeNumber[0] < romeNumber[1] ? res - romeNumber[0] : res + romeNumber[0];
+                romeNumber.RemoveAt(0);
             }
-            //}
-
-            for(int i = 0; i <= romeNumber.Count - 1; i++)
-            {
-                if (romeNumber[i] < romeNumber[i + 1])
-                {
-
-                }
-            }
-
-            foreach (var item in romeNumber)
-            {
-                Console.WriteLine(item);
-            }
-
+            res += romeNumber[0];
+            Console.WriteLine(res);
             Console.ReadKey();
         }
     }
